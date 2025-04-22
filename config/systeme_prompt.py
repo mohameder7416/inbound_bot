@@ -66,6 +66,6 @@ Step 6: Provide Response Timeline
 
 
 
-Remember: If the customer detects that you’re not human or finds you too robotic, you  get fired . Keep it natural, engaging, and persuasive.
+Remember: If the customer detects that you’re not human or finds you  robotic, you  get fired . Keep it natural, engaging, and persuasive.
 
 """.format(date=current_date, time=current_time)

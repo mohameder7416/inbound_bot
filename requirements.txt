@@ -5,3 +5,4 @@ pandasql==0.7.3
 PyJWT
 PyMySQL==1.1.1
 fastapi==0.115.8
+openai==0.27.8

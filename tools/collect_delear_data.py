@@ -34,7 +34,7 @@ async def collect_dealers_data_handler(
     phone_number: str
 ) -> Dict[str, Any]:
     """
-    Collects dealer information and saves it to a JSON file.
+    Collects dealer information and saves it to a JSON file, overriding any existing data.
     
     Args:
         first_name: Dealer's first name
@@ -77,24 +77,9 @@ async def collect_dealers_data_handler(
         # Path to the JSON file
         json_file_path = os.path.join(data_dir, "data.json")
         
-        # Load existing data if file exists
-        existing_data = []
-        if os.path.exists(json_file_path):
-            try:
-                with open(json_file_path, 'r') as file:
-                    existing_data = json.load(file)
-                    if not isinstance(existing_data, list):
-                        existing_data = []
-            except json.JSONDecodeError:
-                logger.warning("⚠️ Existing JSON file is invalid, creating new file")
-                existing_data = []
-        
-        # Add new dealer data to existing data
-        existing_data.append(dealer_data)
-        
-        # Save updated data to JSON file
+        # Save only this dealer data to JSON file, overriding any existing data
         with open(json_file_path, 'w') as file:
-            json.dump(existing_data, file, indent=4)
+            json.dump(dealer_data, file, indent=4)
         
         logger.info(f"✅ Dealer data saved successfully to {json_file_path}")
         return {
