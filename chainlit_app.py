@@ -80,31 +80,15 @@ async def setup_openai_realtime():
         logger.error(f"Error registering tools: {str(e)}")
         return None
 
-    # Connect to the OpenAI Realtime API
-    retry_count = 0
-    while retry_count < 3:
-        try:
-            await openai_realtime.connect()
-            client_connected = True
-            logger.info("Successfully connected to OpenAI Realtime API")
-            return openai_realtime
-        except Exception as e:
-            retry_count += 1
-            logger.error(f"Failed to connect to OpenAI Realtime API (attempt {retry_count})")
-            await asyncio.sleep(1)
-
-    logger.error("Failed to connect to OpenAI Realtime API after 3 attempts")
-    return None
+    return openai_realtime
 
 @cl.on_chat_start
 async def start():
     await cl.Message(content="Hello! I'm here. Press `P` to talk!").send()
-    openai_realtime = await setup_openai_realtime()
-    if openai_realtime:
-        cl.user_session.set("openai_realtime", openai_realtime)
-        logger.info("OpenAI Realtime client initialized and connected")
-    else:
-        await cl.Message(content="Failed to initialize OpenAI Realtime client. Please check your API key and try again.").send()
+    # We no longer initialize the client here
+    # Instead, we'll initialize it when the user actually starts audio
+    cl.user_session.set("openai_realtime", None)
+    logger.info("Chat session started. OpenAI Realtime client will be initialized when audio starts.")
 
 @cl.on_message
 async def on_message(message: cl.Message):
@@ -121,18 +105,34 @@ async def on_message(message: cl.Message):
 @cl.on_audio_start
 async def on_audio_start():
     global client_connected
+    
+    # Get the current client if it exists
     openai_realtime: RealtimeClient = cl.user_session.get("openai_realtime")
-    if openai_realtime and not client_connected:
+    
+    # If client doesn't exist yet, create it
+    if not openai_realtime:
+        logger.info("Initializing OpenAI Realtime client on first audio input")
+        openai_realtime = await setup_openai_realtime()
+        if not openai_realtime:
+            await cl.ErrorMessage(
+                content="Failed to initialize OpenAI Realtime client"
+            ).send()
+            return False
+        cl.user_session.set("openai_realtime", openai_realtime)
+    
+    # Connect the client if it's not already connected
+    if not client_connected:
         try:
             await openai_realtime.connect()
             client_connected = True
             logger.info("Connected to OpenAI realtime")
         except Exception as e:
-            logger.error("Failed to connect to OpenAI realtime")
+            logger.error(f"Failed to connect to OpenAI realtime: {str(e)}")
             await cl.ErrorMessage(
                 content="Failed to connect to OpenAI realtime"
             ).send()
             return False
+    
     return client_connected
 
 @cl.on_audio_chunk
