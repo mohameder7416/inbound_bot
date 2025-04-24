@@ -4,7 +4,7 @@ from .send_email import send_support_email_tool
 tools= [
 end_call_tool,
 collect_dealers_data_tool,
-send_support_email_tool,
+
 ]
 
 
