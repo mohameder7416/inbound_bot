@@ -76,7 +76,7 @@ def load_dealer_data(dealer_id: str) -> Dict[str, Any]:
 # Define the tool definition
 send_support_email_def = {
     "name": "send_support_email",
-    "description": "Send a support ticket email to the dev team with details about customer issues call this function when you detect the customer has an issue",
+    "description": "Send a support ticket email to the development team containing all relevant customer issue details. This function should be called immediately after the issue has been confirmed with the caller, and the ticket creation acknowledgment has been delivered.",
     "parameters": {
         "type": "object",
         "properties": {

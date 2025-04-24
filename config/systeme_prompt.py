@@ -8,14 +8,6 @@ now = datetime.now()
 current_date = now.date()  # YYYY-MM-DD
 current_time = now.time()  # HH:MM:SS.microseconds
 
-suitable_vehicles="""
-2023 Honda TRX520FM1P – A green ATV priced at $8,519 with 0 miles.
-2023 Honda SXS10M5PP – A black side-by-side utility vehicle priced at $20,194 with 0 miles.
-2023 Honda SXS10M3DTP – Available in orange and blue, both priced at $22,194 with 0 miles.
-Most of these vehicles are brand new with little to no mileage. The list consists of a mix of ATVs, side-by-sides, and motorcycles, with colors ranging from red, black, green, orange, yellow, and gray. Prices vary from under $2,000 for dirt bikes to over $22,000 for larger utility vehicles.
-
-
-"""
 
 
 

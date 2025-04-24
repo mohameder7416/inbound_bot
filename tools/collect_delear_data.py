@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 # Define the data collection tool definition
 collect_dealers_data_def = {
     "name": "collect_dealers_data",
-    "description": "Collect dealer information and save it to a JSON file , call this function when you detect all the dealer information",
+    "description": "Collect complete dealer information during the support call and save it in a structured JSON format. This function should be triggered only after all required dealer details have been successfully gathered.",
     "parameters": {
         "type": "object",
         "properties": {
