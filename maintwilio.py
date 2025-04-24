@@ -7,7 +7,7 @@ import json
 import logging
 import asyncio
 from fastapi import FastAPI, WebSocket, Request, WebSocketDisconnect
-from fastapi.responses import JSONResponse, XMLResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, Any
 from uuid import uuid4
@@ -86,7 +86,10 @@ async def incoming_call(request: Request):
     </Response>
     """
     
-    return XMLResponse(content=twiml)
+    return Response(
+        content=twiml,
+        media_type="application/xml"
+    )
 
 @app.websocket("/media-stream")
 async def media_stream(websocket: WebSocket):
@@ -275,4 +278,4 @@ async def status_callback(request: Request):
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    uvicorn.run("maintwilio:app", host="0.0.0.0", port=port, reload=True)
